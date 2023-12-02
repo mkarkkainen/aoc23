@@ -1,3 +1,5 @@
+//same just shitty
+
 const fs = require("fs");
 
 const rawInput = fs.readFileSync("input.txt", "utf-8");
