@@ -1,8 +1,17 @@
 const fs = require("fs");
 
 const rawInput = fs.readFileSync("input.txt", "utf-8");
+const lines = rawInput.split("\n");
 
-let tmp = [];
+const testlines = [
+  "two1nine",
+  "eightwothree",
+  "abcone2threexyz",
+  "xtwone3four",
+  "4nineeightseven2",
+  "zoneight234",
+  "7pqrstsixteen",
+];
 
 const reverseNumberMap = {
   one: 1,
@@ -46,73 +55,56 @@ const findMinMax = (arr) => {
   };
 };
 
-const formatInput = (input) => {
-  const inputToArray = input.split("\n");
+const processLine = (line) => {
+  const array = Array.from({ length: 9 }, (_, index) => ({
+    name: numberToWord(index + 1),
+    num: index + 1,
+    indexes: [],
+  }));
 
-  for (const string of inputToArray) {
-    const numberObjects = Array.from({ length: 9 }, (_, index) => ({
-      name: numberToWord(index + 1),
-      num: index + 1,
-      indexes: [],
-    }));
-
-    for (let i = 0; i < string.length; i++) {
-      if (/^[0-9]*$/g.test(string[i])) {
-        const num = string[i];
-        numberObjects[num - 1].indexes.push(i);
-      } else {
-        let currentWord = "";
-        for (let j = i; j < string.length; j++) {
-          currentWord += string[j];
-          if (numberObjects.some((obj) => obj.name === currentWord)) {
-            numberObjects[wordToNumber(currentWord) - 1].indexes.push(i);
-          }
-        }
-      }
-    }
-
-    let value = {
-      first: "",
-      firstValue: undefined,
-      last: "",
-      lastValue: undefined,
-    };
-
-    numberObjects.forEach((obj) => {
-      if (obj.indexes.length > 0) {
-        const name = obj.num;
-        const { min, max } = findMinMax(obj.indexes);
-
-        if (value.firstValue === undefined || min < value.firstValue) {
-          value.firstValue = min;
-          value.first = name;
-        }
-
-        if (value.lastValue === undefined || max > value.lastValue) {
-          value.lastValue = max;
-          value.last = name;
-        }
-      }
-    });
-
-    tmp.push(`${value.first}${value.last}`);
-  }
-};
-
-const calculateSum = (array) => {
-  let sum = 0;
-  const threshold = Number.MAX_SAFE_INTEGER;
-
-  for (let i = 0; i < array.length; i++) {
-    const number = parseInt(array[i]);
-    if (BigInt(sum) + BigInt(number) > BigInt(threshold)) {
-      sum = BigInt(sum) + BigInt(number);
+  for (let i = 0; i < line.length; i++) {
+    if (/^[0-9]*$/g.test(line[i])) {
+      const num = line[i];
+      array[num - 1].indexes.push(i);
     } else {
-      sum += number;
+      let currentWord = "";
+      for (let j = i; j < line.length; j++) {
+        currentWord += line[j];
+        if (array.some((obj) => obj.name === currentWord)) {
+          array[wordToNumber(currentWord) - 1].indexes.push(i);
+        }
+      }
     }
   }
-  console.log(sum);
+
+  let value = {
+    first: "",
+    firstValue: undefined,
+    last: "",
+    lastValue: undefined,
+  };
+
+  array.forEach((obj) => {
+    if (obj.indexes.length > 0) {
+      const name = obj.num;
+      const { min, max } = findMinMax(obj.indexes);
+
+      if (value.firstValue === undefined || min < value.firstValue) {
+        value.firstValue = min;
+        value.first = name;
+      }
+
+      if (value.lastValue === undefined || max > value.lastValue) {
+        value.lastValue = max;
+        value.last = name;
+      }
+    }
+  });
+
+  return parseInt(`${value.first}${value.last}`);
 };
 
-formatInput(rawInput);
-calculateSum(tmp);
+const calculateSum = (input) =>
+  input.reduce((acc, curr) => processLine(curr) + acc, 0);
+
+console.log(calculateSum(lines));

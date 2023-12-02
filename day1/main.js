@@ -1,3 +1,4 @@
+console.time("set");
 const fs = require("fs");
 
 const input = fs.readFileSync("input.txt", "utf-8");
@@ -30,3 +31,5 @@ const processInput = (input) =>
   input.reduce((total, line) => processLine(line) + total, 0);
 
 console.log(processInput(lines));
+
+console.timeEnd("set");
