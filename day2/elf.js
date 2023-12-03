@@ -7,26 +7,37 @@
 const fs = require("fs");
 
 const data = fs.readFileSync("input.txt", "utf-8");
-const test_data = fs.readFileSync("test.txt", "utf-8");
+const lines = data.split("\n");
 
-const regex = new RegExp(/[:;,]/);
-
-const lines = test_data.split("\n");
-
-const parseLine = (line) => {
-  let store = [];
-  const id = line.split(regex)[0].charAt(5);
-  const play = line.split(regex);
-  //   const bambooz = play.split(6);
-  //   console.log(`id: ${id} , play: ${play}`);
-  console.log(`bambooz: ${play}`);
+const cubeLimits = {
+  blue: 14,
+  green: 13,
+  red: 12,
 };
-//b r , r g b , g
-const sumOfIds = (lines) => {
+
+const parseGame = (line) => {
+  const [gameInfo, rounds] = line.split(":");
+  const gameId = parseInt(gameInfo.split(" ")[1]);
+
+  for (const round of rounds
+    .split(";")
+    .map((x) => x.split(",").map((y) => y.trim()))) {
+    for (const subset of round.map((subset) => subset.split(" "))) {
+      const [count, color] = subset;
+      if (count > cubeLimits[color]) {
+        return null;
+      }
+    }
+  }
+
+  return gameId;
+};
+
+const sumOfValidGames = (lines) => {
   return lines.reduce((acc, curr) => {
-    //test here if needed
-    return acc + parseLine(curr);
+    const gameId = parseGame(curr);
+    return gameId === null ? acc : acc + gameId;
   }, 0);
 };
 
-console.log(sumOfIds(lines));
+console.log(sumOfValidGames(lines));
