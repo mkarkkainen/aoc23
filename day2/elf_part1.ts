@@ -4,10 +4,10 @@
 // 13 green cubes, and 14 blue cubes?
 //
 
-const fs = require("fs");
+import fs from "fs";
 
-const data = fs.readFileSync("input.txt", "utf-8");
-const lines = data.split("\n");
+const data: string = fs.readFileSync("input.txt", "utf-8");
+const lines: string[] = data.split("\n");
 
 const cubeLimits = {
   blue: 14,
@@ -15,7 +15,7 @@ const cubeLimits = {
   red: 12,
 };
 
-const parseGame = (line) => {
+const parseGame = (line: string): number | null => {
   const [gameInfo, rounds] = line.split(":");
   const gameId = parseInt(gameInfo.split(" ")[1]);
 
@@ -33,7 +33,7 @@ const parseGame = (line) => {
   return gameId;
 };
 
-const sumOfValidGames = (lines) => {
+const sumOfValidGames = (lines): number => {
   return lines.reduce((acc, curr) => {
     const gameId = parseGame(curr);
     return gameId === null ? acc : acc + gameId;
