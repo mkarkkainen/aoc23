@@ -23,7 +23,6 @@ const [correctNumbers, yourNumbers] = contents.reduce(
   },
   [[], []],
 );
-lkj;
 
 const countMatches = (correctNumbersArray, testNumbersArray) => {
   let sum = 0;
