@@ -11,18 +11,19 @@ const [correctNumbers, yourNumbers] = contents.reduce(
       curr[0]
         .trim()
         .split(" ")
-        .filter((x) => x !== "")
+        .filter((x) => x !== ""),
     );
     acc[1].push(
       curr[1]
         .trim()
         .split(" ")
-        .filter((x) => x !== "")
+        .filter((x) => x !== ""),
     );
     return acc;
   },
-  [[], []]
+  [[], []],
 );
+lkj;
 
 const countMatches = (correctNumbersArray, testNumbersArray) => {
   let sum = 0;

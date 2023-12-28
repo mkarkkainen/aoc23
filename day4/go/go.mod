@@ -1,3 +1,3 @@
-module part1
+module GO 
 
 go 1.21.3
