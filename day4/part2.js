@@ -1,4 +1,3 @@
-const { match } = require("assert");
 const fs = require("fs");
 
 const contents = fs
