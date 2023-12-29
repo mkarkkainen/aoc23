@@ -2,7 +2,9 @@ const fs = require("fs");
 let result = 0;
 fs.readFileSync("./input.txt", "utf-8")
   .split("\n")
-  .map((x) => x.split(":")[1].split(" | "))
+  .map((x) => {
+    x.split(":")[1].split(" | ");
+  })
   .map((x) => x.map((x) => x.split(" ").filter((x) => x !== "")))
   .map((x) => x.map((x) => x.map((x) => parseInt(x))))
   .map((x) => {
